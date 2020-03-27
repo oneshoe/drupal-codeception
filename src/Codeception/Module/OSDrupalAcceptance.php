@@ -25,14 +25,27 @@ class OSDrupalAcceptance extends Module {
   private $amAdmin = FALSE;
 
   /**
-   * The username of user 0.
+   * The username of user 1.
    */
-  const ROOT_USER = 'root';
+  protected $rootUser;
 
   /**
-   * The password of user 0.
+   * The password of user 1.
    */
-  const ROOT_PASS = 'rootpass';
+  protected $rootPassword;
+
+  /**
+   * OSDrupalAcceptance constructor.
+   *
+   * @param \Codeception\Lib\ModuleContainer $moduleContainer
+   * @param null $config
+   */
+  public function __construct(ModuleContainer $moduleContainer, $config = NULL) {
+    parent::__construct($moduleContainer, $config);
+
+    $this->rootUser = isset($config['rootUser']) ? $config['rootUser'] : 'admin';
+    $this->rootPassword = isset($config['rootPassword']) ? $config['rootPassword'] : 'admin';
+  }
 
   /**
    * Login with a role.
@@ -61,7 +74,7 @@ class OSDrupalAcceptance extends Module {
       $I->see($name, UserLoginPage::USERNAME);
       $I->saveSessionSnapshot($name);
     }
-    $I->amAdmin = ($name === self::ROOT_USER);
+    $I->amAdmin = ($name === $this->rootUser);
   }
 
   /**
@@ -71,7 +84,7 @@ class OSDrupalAcceptance extends Module {
     $I = $this;
     $I->saveSessionSnapshot('currentUser');
     if (!$I->amAdmin) {
-      $I->loginAs(self::ROOT_USER, self::ROOT_PASS);
+      $I->loginAs($this->rootUser, $this->rootPassword);
       $I->amAdmin = TRUE;
     }
   }
@@ -117,7 +130,7 @@ class OSDrupalAcceptance extends Module {
   public function createTestUser($role = NULL, $name = NULL): array {
     $I = $this;
     $password = $I->generateRandomPassword();
-    $I->loginAs(self::ROOT_USER, self::ROOT_PASS);
+    $I->loginAs($this->rootUser, $this->rootPassword);
     $I->amOnPage('admin/people/create');
     if (is_null($name)) {
       $name = 'test-' . $password;
@@ -162,7 +175,7 @@ class OSDrupalAcceptance extends Module {
    */
   public function deleteUser($username) {
     $I = $this;
-    $I->loginAs(self::ROOT_USER, self::ROOT_PASS);
+    $I->loginAs($this->rootUser, $this->rootPassword);
     $I->amOnPage('ervaringen-van-anderen/personen/' . $username . '/cancel');
     $I->selectOption('#edit-user-cancel-method-user-cancel-block', 'user_cancel_block');
     $I->uncheckOption('#edit-user-cancel-confirm');
