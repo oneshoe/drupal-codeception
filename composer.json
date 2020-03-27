@@ -1,5 +1,5 @@
 {
-    "name": "oneshoe/drupal-codeception-extension",
+    "name": "oneshoe/drupal-codeception",
     "description": "Extension to the Codeception toolset for Drupal testing.",
     "type": "package",
     "require": {
