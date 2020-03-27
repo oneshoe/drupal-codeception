@@ -1,0 +1,24 @@
+{
+    "name": "oneshoe/drupal-codeception-extension",
+    "description": "Extension to the Codeception toolset for Drupal testing.",
+    "type": "package",
+    "require": {
+        "guncha25/drupal-codeception": "^8.0"
+    },
+    "require-dev": {
+        "drupal/core": "^8"
+    },
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Eelke Blok",
+            "email": "eelke.blok@oneshoe.nl"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Codeception\\": "src/Codeception"
+        }
+    }
+}
