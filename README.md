@@ -1,6 +1,8 @@
 # One Shoe Drupal Codeception extension
 Extension to the Codeception toolset for Drupal testing.
 
+**Note:** This is pre-pre-alpha. It's not functional yet. 
+
 To use, add the following repository definition to your composer.json:
 
     "repositories": [
@@ -11,5 +13,3 @@ To use, add the following repository definition to your composer.json:
     ]
         
 Then, require `oneshoe/drupal-codeception-extension:dev-master`.
-
-TODO: Document how to add to Codeception.
