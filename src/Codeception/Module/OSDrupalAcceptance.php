@@ -35,6 +35,11 @@ class OSDrupalAcceptance extends Module {
   protected $rootPassword;
 
   /**
+   * Role to use to distinguish test users.
+   */
+  protected $testRole;
+
+  /**
    * OSDrupalAcceptance constructor.
    *
    * @param \Codeception\Lib\ModuleContainer $moduleContainer
@@ -45,6 +50,16 @@ class OSDrupalAcceptance extends Module {
 
     $this->rootUser = isset($config['rootUser']) ? $config['rootUser'] : 'admin';
     $this->rootPassword = isset($config['rootPassword']) ? $config['rootPassword'] : 'admin';
+    $this->testRole = isset($config['testRole']) ? $config['testRole'] = 'codeceptiontester';
+  }
+
+  public function _beforeSuite($settings = []) {
+    $commands = [
+      // Create a test role to distinguish test users.
+      'role-create ' . $this->testRole => [],
+    ];
+
+    $this->executeDrushCommands($commands);
   }
 
   /**
@@ -344,6 +359,27 @@ class OSDrupalAcceptance extends Module {
     $webDriver->wait(1);
 
     $webDriver->switchTo()->defaultContent();
+  }
+
+  /**
+   * Execute one or more drush commands.
+   *
+   * @param array $commands
+   *   An array describing the commands. Keys are the command with any
+   *   arguments, values are arrays of options. The options will be
+   *   augmented with the proper root directory and uri.
+   */
+  protected function executeDrushCommands($commands) {
+    $pwd = getcwd();
+
+    /** @var \Codeception\Module\DrupalDrush $drush */
+    $drush = $this->getModule('DrupalDrush');
+
+    foreach ($commands as $command => $options) {
+      $options += ['root' => $pwd . '/web', 'uri' => 'http://default'];
+      $output = $drush->runDrush($command, $options);
+      codecept_debug($output);
+    }
   }
 
 }
