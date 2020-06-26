@@ -2,11 +2,19 @@
     "name": "oneshoe/drupal-codeception",
     "description": "Extension to the Codeception toolset for Drupal testing.",
     "type": "package",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
     "require": {
         "guncha25/drupal-codeception": "^8.0"
     },
     "require-dev": {
-        "drupal/core": "^8"
+        "drupal/core": "^8",
+        "composer/installers": "^1.2",
+        "composer/xdebug-handler": "^1.0"
     },
     "license": "GPL-2.0",
     "authors": [
@@ -19,6 +27,24 @@
     "autoload": {
         "psr-4": {
             "Codeception\\": "src/Codeception"
+        }
+    },
+    "extra": {
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "web/"
+            },
+            "allowed-packages": [
+                "drupal/core"
+            ]
+        },
+        "installer-paths": {
+            "web/core": ["type:drupal-core"],
+            "web/libraries/{$name}": ["type:drupal-library"],
+            "web/modules/contrib/{$name}": ["type:drupal-module"],
+            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
+            "web/themes/contrib/{$name}": ["type:drupal-theme"],
+            "drush/contrib/{$name}": ["type:drupal-drush"]
         }
     }
 }
