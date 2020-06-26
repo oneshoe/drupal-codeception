@@ -89,7 +89,6 @@ class OSDrupalAcceptance extends Module {
    */
   public function loginAs($name, $password = NULL) {
     $I = $this;
-    $I->resizeWindow(800, 600);
     $I->clearCookies();
     if (!$I->loadSessionSnapshot($name)) {
       try {
