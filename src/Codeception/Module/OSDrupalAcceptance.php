@@ -2,6 +2,7 @@
 
 namespace Codeception\Module;
 
+use Codeception\Exception\ModuleException;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Codeception\Util\Drupal\FormField;
@@ -86,26 +87,29 @@ class OSDrupalAcceptance extends Module {
    *   User name.
    * @param string $password
    *   [Optional] password.
+   *
+   * @throws \Codeception\Exception\ModuleException
    */
   public function loginAs($name, $password = NULL) {
-    $I = $this;
-    $I->clearCookies();
-    if (!$I->loadSessionSnapshot($name)) {
+    $this->clearCookies();
+    $webDriver = $this->getWebDriver();
+
+    if (!$webDriver->loadSessionSnapshot($name)) {
       try {
-        $currentUrl = $I->grabFromCurrentUrl();
+        $currentUrl = $webDriver->grabFromCurrentUrl();
       }
       catch (ModuleException $e) {
         $currentUrl = '';
       }
-      $I->amOnPage('/user/login?destination=' . $currentUrl);
-      $I->submitForm(UserLoginPage::USERLOGIN, [
+      $webDriver->amOnPage('/user/login?destination=' . $currentUrl);
+      $webDriver->submitForm(UserLoginPage::USERLOGIN, [
         'name' => $name,
         'pass' => $password ?: 'password',
       ]);
-      $I->see($name, UserLoginPage::USERNAME);
-      $I->saveSessionSnapshot($name);
+      $webDriver->see($name, UserLoginPage::USERNAME);
+      $webDriver->saveSessionSnapshot($name);
     }
-    $I->amAdmin = ($name === $this->rootUser);
+    $this->amAdmin = ($name === $this->rootUser);
   }
 
   /**
@@ -438,25 +442,6 @@ class OSDrupalAcceptance extends Module {
     $webDriver = $this->getModule('WebDriver');
 
     return $webDriver;
-  }
-
-  /**
-   * Loads cookies from a saved snapshot.
-   *
-   * Allows to reuse same session across tests without additional login.
-   *
-   * Calls method of the same name in the webDriver module.
-   *
-   * @param $name
-   *   Snapshot name.
-   *
-   * @return mixed
-   *
-   * @throws \Codeception\Exception\ModuleException
-   * @see \Codeception\Module\WebDriver::loadSessionSnapshot()
-   */
-  public function loadSessionSnapshot($name) {
-    return $this->getWebDriver()->loadSessionSnapshot($name);
   }
 
 }
