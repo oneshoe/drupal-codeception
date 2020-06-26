@@ -50,7 +50,7 @@ class OSDrupalAcceptance extends Module {
 
     $this->rootUser = isset($config['rootUser']) ? $config['rootUser'] : 'admin';
     $this->rootPassword = isset($config['rootPassword']) ? $config['rootPassword'] : 'admin';
-    $this->testRole = isset($config['testRole']) ? $config['testRole'] = 'codeceptiontester';
+    $this->testRole = isset($config['testRole']) ? $config['testRole'] : 'codeceptiontester';
   }
 
   public function _beforeSuite($settings = []) {
