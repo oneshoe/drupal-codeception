@@ -80,7 +80,7 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
-   * Login with a role.
+   * Login as a named user.
    *
    * @param string $name
    *   User name.
