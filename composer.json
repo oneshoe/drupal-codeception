@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "drush/drush": "^10.3",
         "guncha25/drupal-codeception": "^8.0"
     },
     "require-dev": {
