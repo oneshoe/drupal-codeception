@@ -363,24 +363,44 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
-   * Execute one or more drush commands.
+   * Execute multiple Drush commands.
    *
    * @param array $commands
    *   An array describing the commands. Keys are the command with any
    *   arguments, values are arrays of options. The options will be
    *   augmented with the proper root directory and uri.
    */
-  protected function executeDrushCommands($commands) {
+  public function executeDrushCommands($commands) {
+    foreach ($commands as $command => $options) {
+      $output = $this->executeDrushCommand($command, $options);
+      codecept_debug($output);
+    }
+  }
+
+  /**
+   * Execute a Drush command.
+   *
+   * This is a wrapper around the runDrush() method of the DrupalDrush module.
+   * The options will be augmented with the proper root directory and uri.
+   *
+   * @param string $command
+   *   The command to execute. Include any options that do not have a value.
+   * @param array $options
+   *   Options that have a value. The key is the option, the value is... you
+   *   guessed it. Use the full name, as the option will be prepended with --.
+   *
+   * @return string
+   *   The output of the command.
+   */
+  public function executeDrushCommand($command, array $options = []) {
     $pwd = getcwd();
 
     /** @var \Codeception\Module\DrupalDrush $drush */
     $drush = $this->getModule('DrupalDrush');
 
-    foreach ($commands as $command => $options) {
-      $options += ['root' => $pwd . '/web', 'uri' => 'http://default'];
-      $output = $drush->runDrush($command, $options);
-      codecept_debug($output);
-    }
+    $options += ['root' => $pwd . '/web', 'uri' => 'http://default'];
+
+    return $drush->runDrush($command, $options);
   }
 
 }
