@@ -20,7 +20,8 @@
     "require-dev": {
         "composer/installers": "^1.2",
         "composer/xdebug-handler": "^1.0",
-        "drupal/core": "^8"
+        "drupal/core-recommended": "^8",
+        "drupal/core-composer-scaffold": "^8"
     },
     "license": "GPL-2.0",
     "authors": [
