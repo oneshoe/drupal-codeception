@@ -195,18 +195,6 @@ class OSDrupalAcceptance extends Module {
    *
    * @param string $username
    *   Username.
-   *
-   * @deprecated Use deleteUser instead.
-   */
-  public function deleteTestUser($username) {
-    $this->deleteUser($username);
-  }
-
-  /**
-   * Delete user by given username.
-   *
-   * @param string $username
-   *   Username.
    */
   public function deleteUser($username) {
     $I = $this;
