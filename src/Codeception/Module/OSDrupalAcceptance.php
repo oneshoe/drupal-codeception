@@ -54,13 +54,12 @@ class OSDrupalAcceptance extends Module {
   }
 
   public function _beforeSuite($settings = []) {
-    // @todo Re-enable this. We need to make sure whe have the role available.
-//    $commands = [
-//      // Create a test role to distinguish test users.
-//      'role-create ' . $this->testRole => [],
-//    ];
-//
-//    $this->executeDrushCommands($commands);
+    $output = $this->executeDrushCommand('role:list', ['format' => 'json']);
+    $roles = json_decode($output, TRUE);
+
+    if (!isset($roles[$this->testRole])) {
+      $this->executeDrushCommand('role:create ' . $this->testRole . ' -q');
+    }
   }
 
   /**
