@@ -6,11 +6,16 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "vcs",
+            "url": "https://stash.office.oneshoe.nl/scm/os/test-users.git"
         }
     ],
     "require": {
         "drush/drush": "^10.3",
-        "guncha25/drupal-codeception": "^8.0"
+        "guncha25/drupal-codeception": "^8.0",
+        "oneshoe/test_users": "dev-master"
     },
     "require-dev": {
         "composer/installers": "^1.2",
