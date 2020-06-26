@@ -14,7 +14,7 @@ tooling:
     cmd: drush --root /app/web
   clean-install:
     service: appserver
-    cmd: drush si --root /app/web --site-name "Drupal Codeception" --db-url mysql://drupal8:drupal8@database/drupal8 --account-pass supersecret standard  -y
+    cmd: drush si --root /app/web --site-name "Drupal Codeception" --db-url mysql://drupal8:drupal8@database/drupal8 --account-name root --account-pass supersecret standard  -y
   codecept:
     service: appserver
     description: Test runner.
