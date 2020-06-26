@@ -420,13 +420,15 @@ class OSDrupalAcceptance extends Module {
 
   /**
    * Delete all cookies for the current webdriver.
+   *
+   * @throws \Codeception\Exception\ModuleException
    */
   public function clearCookies() {
-    $this->getWebDriver()->manage()->deleteAllCookies();
+    $this->getWebDriver()->webDriver->manage()->deleteAllCookies();
   }
 
   /**
-   * Get the current webdriver.
+   * Get the webdriver module.
    *
    * @return \Codeception\Module\WebDriver
    *   Webdriver.
@@ -434,7 +436,29 @@ class OSDrupalAcceptance extends Module {
    * @throws \Codeception\Exception\ModuleException
    */
   protected function getWebDriver() {
-    return $this->getModule('WebDriver')->webDriver;
+    /** @var \Codeception\Module\WebDriver $webDriver */
+    $webDriver = $this->getModule('WebDriver');
+
+    return $webDriver;
+  }
+
+  /**
+   * Loads cookies from a saved snapshot.
+   *
+   * Allows to reuse same session across tests without additional login.
+   *
+   * Calls method of the same name in the webDriver module.
+   *
+   * @param $name
+   *   Snapshot name.
+   *
+   * @return mixed
+   *
+   * @throws \Codeception\Exception\ModuleException
+   * @see \Codeception\Module\WebDriver::loadSessionSnapshot()
+   */
+  public function loadSessionSnapshot($name) {
+    return $this->getWebDriver()->loadSessionSnapshot($name);
   }
 
 }
