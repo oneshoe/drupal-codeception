@@ -5,6 +5,7 @@ namespace Codeception\Module;
 use Codeception\Exception\ModuleException;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
+use Pages\UserLoginPage;
 use Codeception\Util\Drupal\FormField;
 use Codeception\Util\Drupal\ParagraphFormField;
 use Codeception\Util\IdentifiableFormFieldInterface;
@@ -101,12 +102,12 @@ class OSDrupalAcceptance extends Module {
       catch (ModuleException $e) {
         $currentUrl = '';
       }
-      $webDriver->amOnPage('/user/login?destination=' . $currentUrl);
+      $webDriver->amOnPage(UserLoginPage::URL . '?destination=' . $currentUrl);
       $webDriver->submitForm(UserLoginPage::USERLOGIN, [
         'name' => $name,
         'pass' => $password ?: 'password',
       ]);
-      $webDriver->see($name, UserLoginPage::USERNAME);
+      $webDriver->see($name);
       $webDriver->saveSessionSnapshot($name);
     }
     $this->amAdmin = ($name === $this->rootUser);
