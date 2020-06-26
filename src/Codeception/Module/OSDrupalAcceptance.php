@@ -418,4 +418,23 @@ class OSDrupalAcceptance extends Module {
     return $drush->runDrush($command, $options);
   }
 
+  /**
+   * Delete all cookies for the current webdriver.
+   */
+  public function clearCookies() {
+    $this->getWebDriver()->manage()->deleteAllCookies();
+  }
+
+  /**
+   * Get the current webdriver.
+   *
+   * @return \Codeception\Module\WebDriver
+   *   Webdriver.
+   *
+   * @throws \Codeception\Exception\ModuleException
+   */
+  protected function getWebDriver() {
+    return $this->getModule('WebDriver')->webDriver;
+  }
+
 }
