@@ -62,6 +62,11 @@ class OSDrupalAcceptance extends Module {
     }
   }
 
+  public function _afterSuite($settings = []) {
+    $output = $this->executeDrushCommand('test-users:delete-with-role ' . $this->testRole);
+    codecept_debug($output);
+  }
+
   /**
    * Login with a role.
    *
