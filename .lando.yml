@@ -11,10 +11,10 @@ config:
 tooling:
   drush:
     service: appserver
-    cmd: drush --root=/app/web
+    cmd: drush --root /app/web
   clean-install:
     service: appserver
-    cmd: drush si standard --account-pass=supersecret -y
+    cmd: drush si --root /app/web --db-url mysql://drupal8:drupal8@database/drupal8 --account-pass supersecret standard  -y
   codecept:
     service: appserver
     description: Test runner.
