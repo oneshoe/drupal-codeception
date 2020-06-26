@@ -7,7 +7,22 @@
 actor: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
-            url: http://localhost/myapp
+        - Asserts
+        - WebDriver:
+              browser: chrome
+              capabilities:
+                  javascriptEnabled: true
+                  resourceTimeout: 300000
+                  chromeOptions:
+                      args:
+                          - headless
+                          - disable-dev-shm-usage
+              host: %CHROMEDRIVER_HOST%
+              url: %WEBDRIVER_URL%
         - \Helper\Acceptance
-    step_decorators: ~        
+        - DrupalAcceptance
+        - OSDrupalAcceptance:
+              rootUser: root
+              rootPassword: rootpass
+        - DrupalDrush
+    step_decorators: ~
