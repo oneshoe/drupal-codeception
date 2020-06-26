@@ -273,8 +273,7 @@ class OSDrupalAcceptance extends Module {
    */
   public function fillCkEditorById($element_id, $content) {
     $selector = WebDriverBy::cssSelector('#cke_' . $element_id . ' iframe');
-    /** @var \Facebook\WebDriver\Remote\RemoteWebDriver $webDriver */
-    $webDriver = $this->getWebDriver();
+    $webDriver = $this->getWebDriver()->webDriver;
     $webDriver->wait(10, 1000)->until(
       WebDriverExpectedCondition::presenceOfElementLocated($selector)
     );
@@ -357,8 +356,7 @@ class OSDrupalAcceptance extends Module {
    * @throws \Exception
    */
   private function fillRteEditor(WebDriverBy $selector, $content) {
-    /** @var \Facebook\WebDriver\Remote\RemoteWebDriver $webDriver */
-    $webDriver = $this->getWebDriver();
+    $webDriver = $this->getWebDriver()->webDriver;
     $webDriver->wait(10, 1000)->until(
       WebDriverExpectedCondition::presenceOfElementLocated($selector)
     );
