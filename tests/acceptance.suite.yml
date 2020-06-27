@@ -23,6 +23,6 @@ modules:
         - DrupalAcceptance
         - OSDrupalAcceptance:
               rootUser: root
-              rootPassword: rootpass
+              rootPassword: supersecret
         - DrupalDrush
     step_decorators: ~

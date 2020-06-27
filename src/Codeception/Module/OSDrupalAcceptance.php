@@ -124,26 +124,28 @@ class OSDrupalAcceptance extends Module {
 
   /**
    * Switch to admin user.
+   *
+   * @throws \Codeception\Exception\ModuleException
    */
-  private function switchToAdmin() {
-    $I = $this;
-    $I->saveSessionSnapshot('currentUser');
-    if (!$I->amAdmin) {
-      $I->loginAs($this->rootUser, $this->rootPassword);
-      $I->amAdmin = TRUE;
+  public function switchToAdmin() {
+    $this->getWebDriver()->saveSessionSnapshot('currentUser');
+    if (!$this->amAdmin) {
+      $this->loginAs($this->rootUser, $this->rootPassword);
+      $this->amAdmin = TRUE;
     }
   }
 
   /**
    * Switch back to previous user.
+   *
+   * @throws \Codeception\Exception\ModuleException
    */
-  private function switchBackFromAdmin() {
-    $I = $this;
-    if ($I->amAdmin) {
-      $I->clearCookies();
-      $this->loadSessionSnapshot('currentUser');
+  public function switchBackFromAdmin() {
+    if ($this->amAdmin) {
+      $this->clearCookies();
+      $this->getWebDriver()->loadSessionSnapshot('currentUser');
 
-      $I->amAdmin = FALSE;
+      $this->amAdmin = FALSE;
     }
   }
 
