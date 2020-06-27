@@ -23,7 +23,6 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
  */
 class OSDrupalAcceptance extends Module {
 
-  protected $nodes = [];
   private $amAdmin = FALSE;
 
   /**
@@ -146,21 +145,6 @@ class OSDrupalAcceptance extends Module {
 
       $this->amAdmin = FALSE;
     }
-  }
-
-  /**
-   * Delete all the nodes created in this tester.
-   */
-  public function cleanupNodes() {
-    $this->switchToAdmin();
-    if (!empty($this->nodes)) {
-      foreach (array_keys($this->nodes) as $nid) {
-        $this->amOnPage('node/' . $nid . '/delete');
-        $this->click('Verwijderen');
-      }
-      $this->nodes = [];
-    }
-    $this->switchBackFromAdmin();
   }
 
   /**
