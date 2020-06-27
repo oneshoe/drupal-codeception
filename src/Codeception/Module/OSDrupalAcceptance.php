@@ -82,6 +82,15 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
+   * Whether logged in as admin.
+   *
+   * @return bool
+   */
+  public function amAdmin() {
+    return $this->amAdmin;
+  }
+
+  /**
    * Login as a named user.
    *
    * @param string $name
