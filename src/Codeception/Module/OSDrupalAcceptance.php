@@ -116,7 +116,6 @@ class OSDrupalAcceptance extends Module {
         'name' => $name,
         'pass' => $password ?: 'password',
       ]);
-      $webDriver->see($name);
       $webDriver->saveSessionSnapshot($name);
     }
     $this->amAdmin = ($name === $this->rootUser);
