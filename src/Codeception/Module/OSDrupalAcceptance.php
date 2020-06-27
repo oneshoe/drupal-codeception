@@ -152,16 +152,15 @@ class OSDrupalAcceptance extends Module {
    * Delete all the nodes created in this tester.
    */
   public function cleanupNodes() {
-    $I = $this;
-    $I->switchToAdmin();
+    $this->switchToAdmin();
     if (!empty($this->nodes)) {
       foreach (array_keys($this->nodes) as $nid) {
-        $I->amOnPage('node/' . $nid . '/delete');
-        $I->click('Verwijderen');
+        $this->amOnPage('node/' . $nid . '/delete');
+        $this->click('Verwijderen');
       }
       $this->nodes = [];
     }
-    $I->switchBackFromAdmin();
+    $this->switchBackFromAdmin();
   }
 
   /**
