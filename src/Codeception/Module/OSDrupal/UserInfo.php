@@ -27,16 +27,26 @@ class UserInfo {
   private $password;
 
   /**
+   * The user's email address.
+   *
+   * @var string
+   */
+  private $mail;
+
+  /**
    * UserInfo constructor.
    *
    * @param string $name
    *   The user's name.
    * @param $password
    *   The user's password.
+   * @param $mail
+   *   The user's email address.
    */
-  public function __construct($name, $password) {
+  public function __construct($name, $password, $mail) {
     $this->name = $name;
     $this->password = $password;
+    $this->mail = $mail;
   }
 
   /**
@@ -65,6 +75,20 @@ class UserInfo {
    */
   public function setPassword($password) {
     $this->password = $password;
+  }
+
+  /**
+   * @return string
+   */
+  public function getMail() {
+    return $this->mail;
+  }
+
+  /**
+   * @param string $mail
+   */
+  public function setMail($mail) {
+    $this->mail = $mail;
   }
 
 }

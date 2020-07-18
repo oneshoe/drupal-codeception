@@ -159,9 +159,11 @@ class OSDrupalAcceptance extends Module {
       $name = 'test-' . $password;
     }
 
+    $mail = $name . '@localhost.localdomain';
+
     $this->executeDrushCommand('user:create ' . $name, [
       'password' => $password,
-      'mail' => $name . '@localhost.localdomain',
+      'mail' => $mail,
     ]);
 
     $roles = array_merge($roles, [$this->testRole]);
@@ -169,7 +171,7 @@ class OSDrupalAcceptance extends Module {
       $this->executeDrushCommand("user:role:add $role $name");
     }
 
-    return new UserInfo($name, $password);
+    return new UserInfo($name, $password, $mail);
   }
 
   /**
