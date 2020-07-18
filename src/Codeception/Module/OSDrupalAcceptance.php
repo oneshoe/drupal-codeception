@@ -5,11 +5,8 @@ namespace Codeception\Module;
 use Codeception\Exception\ModuleException;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
+use Codeception\Module\OSDrupal\UserInfo;
 use Pages\UserLoginPage;
-use Codeception\Util\Drupal\FormField;
-use Codeception\Util\Drupal\ParagraphFormField;
-use Codeception\Util\IdentifiableFormFieldInterface;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
 
 /**
  * Class OSDrupalAcceptance.
@@ -129,7 +126,6 @@ class OSDrupalAcceptance extends Module {
     $this->getWebDriver()->saveSessionSnapshot('currentUser');
     if (!$this->amAdmin) {
       $this->loginAs($this->rootUser, $this->rootPassword);
-      $this->amAdmin = TRUE;
     }
   }
 
@@ -153,35 +149,27 @@ class OSDrupalAcceptance extends Module {
    * @param string $role
    *   Role.
    *
-   * @return array
+   * @return \Codeception\Module\OSDrupal\UserInfo
    *   User data.
    */
-  public function createTestUser($role = NULL, $name = NULL): array {
-    $I = $this;
-    $password = $I->generateRandomPassword();
-    $I->loginAs($this->rootUser, $this->rootPassword);
-    $I->amOnPage('admin/people/create');
+  public function createTestUser($roles = [], $name = NULL) {
+    $password = $this->generateRandomPassword();
+
     if (is_null($name)) {
       $name = 'test-' . $password;
     }
-    $I->fillField('#edit-name', $name);
-    $I->fillField('#edit-mail', $name . '@localhost.localdomain');
-    $I->fillField('#edit-pass-pass1', $password);
-    $I->fillField('#edit-pass-pass2', $password);
-    $I->checkOption(ucfirst(Acceptance::TEST_ROLE));
-    if ($role) {
-      $I->checkOption(ucfirst($role));
-    }
-    // This one is a bit strange, it doesn't have a proper ID.
-    $I->fillField('Your current logout threshold', 3600);
-    $I->checkOption(UserRegisterPage::LEGALAGEFIELD);
-    $I->checkOption(UserRegisterPage::LEGALTERMSFIELD);
-    $I->click('#edit-submit');
 
-    return [
-      'username' => $name,
+    $this->executeDrushCommand('user:create ' . $name, [
       'password' => $password,
-    ];
+      'mail' => $name . '@localhost.localdomain',
+    ]);
+
+    $roles = array_merge($roles, [$this->testRole]);
+    foreach ($roles as $role) {
+      $this->executeDrushCommand("user:role:add $role $name");
+    }
+
+    return new UserInfo($name, $password);
   }
 
   /**
