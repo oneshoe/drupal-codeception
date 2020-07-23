@@ -24,6 +24,3 @@ lando start
 
 log "Install composer dependencies."
 lando composer install
-
-log "Install Drupal."
-lando clean-install
