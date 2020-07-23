@@ -177,17 +177,11 @@ class OSDrupalAcceptance extends Module {
   /**
    * Delete user by given username.
    *
-   * @param string $username
+   * @param string $name
    *   Username.
    */
-  public function deleteUser($username) {
-    $I = $this;
-    $I->loginAs($this->rootUser, $this->rootPassword);
-    $I->amOnPage('ervaringen-van-anderen/personen/' . $username . '/cancel');
-    $I->selectOption('#edit-user-cancel-method-user-cancel-block', 'user_cancel_block');
-    $I->uncheckOption('#edit-user-cancel-confirm');
-    $I->click('#edit-submit');
-    $I->waitForBatchProcessToFinish();
+  public function deleteUser($name) {
+    $this->executeDrushCommand('user:cancel ' . $name);
   }
 
   /**
