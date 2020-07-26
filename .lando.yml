@@ -11,6 +11,7 @@ config:
 tooling:
   drush:
     service: appserver
+    description: Runs drush.
     cmd: drush --root /app/web
   clean-install:
     service: appserver
