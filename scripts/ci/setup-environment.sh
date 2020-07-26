@@ -8,6 +8,12 @@ source "$(dirname "$0")/../common.sh"
 # Stop on any error.
 set -e
 
+echo "Make test results directory if it does not exist."
+mkdir -p testresults
+
+echo "Move to the checkout directory."
+cd checkout
+
 log "Set a local Lando configuration with overriden project name."
 # awk to convert the project name to lower case. Upper case has proven
 # troublesome with Lando.
@@ -24,3 +30,12 @@ lando start
 
 log "Install composer dependencies."
 lando composer install
+
+echo "Install Drupal."
+lando clean-install
+
+echo "Set logging to verbose."
+lando -vvv drush cset system.logging error_level verbose
+
+echo "Copy composer.lock so we know what the status quo is."
+cp composer.lock ../testresults/
