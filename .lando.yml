@@ -11,7 +11,7 @@ config:
 tooling:
   drush:
     service: appserver
-    cmd: /app/vendor/bin/drush --root /app/web
+    cmd: drush --root /app/web
   clean-install:
     service: appserver
     cmd:
