@@ -12,7 +12,7 @@ mkdir -p testresults
 echo "Move to the checkout directory."
 cd checkout
 
-log "Set a local Lando configuration with overriden project name."
+echo "Set a local Lando configuration with overriden project name."
 # awk to convert the project name to lower case. Upper case has proven
 # troublesome with Lando.
 echo "name: ${landoEnvironmentName}" | awk '{print tolower($0)}' > .lando.local.yml
@@ -23,10 +23,10 @@ services:
       environment:
         ONESHOE_ENV: test' >> .lando.local.yml
 
-log "Start Lando."
+echo "Start Lando."
 lando start
 
-log "Install composer dependencies."
+echo "Install composer dependencies."
 lando composer install
 
 echo "Install Drupal."
