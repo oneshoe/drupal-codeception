@@ -42,7 +42,7 @@ echo "Install Drupal."
 lando clean-install
 
 echo "Set logging to verbose."
-lando drush cset system.logging error_level verbose
+lando drush cset system.logging error_level verbose -y
 
 echo "Copy composer.lock so we know what the status quo is."
 cp composer.lock ../testresults/
