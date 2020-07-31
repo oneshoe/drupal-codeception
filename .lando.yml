@@ -12,7 +12,7 @@ tooling:
   drush:
     service: appserver
     description: Run drush.
-    cmd: "/app/vendor/bin/drush --root=/app/web"
+    cmd: '/app/vendor/bin/drush --root=/app/web'
   clean-install:
     service: appserver
     cmd:
