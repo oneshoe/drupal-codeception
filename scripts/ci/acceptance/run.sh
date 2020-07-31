@@ -9,5 +9,7 @@ set -e
 "$(cd -P -- "$(dirname -- "$0")" && pwd -P)/../setup-environment.sh"
 # Running the above script will have moved us to the checkout directory.
 
+cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)/../../.."
+
 echo "Run acceptance tests."
 lando codecept run acceptance
