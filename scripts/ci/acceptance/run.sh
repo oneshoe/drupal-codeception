@@ -10,4 +10,4 @@ set -e
 # Running the above script will have moved us to the checkout directory.
 
 echo "Run acceptance tests."
-lando codecept run
+lando codecept run acceptance
