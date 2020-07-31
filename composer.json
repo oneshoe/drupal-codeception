@@ -15,7 +15,7 @@
     "require": {
         "drush/drush": "^10.3",
         "guncha25/drupal-codeception": "^8.0",
-        "oneshoe/test_users": "dev-master",
+        "oneshoe/test_users": "*",
         "ext-json": "*"
     },
     "require-dev": {
