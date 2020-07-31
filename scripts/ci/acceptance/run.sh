@@ -6,9 +6,6 @@
 # Stop on any error.
 set -e
 
-# Be more verbose about the commands being executed.
-set -x
-
 "$(cd -P -- "$(dirname -- "$0")" && pwd -P)/../setup-environment.sh"
 # Running the above script will have moved us to the checkout directory.
 
