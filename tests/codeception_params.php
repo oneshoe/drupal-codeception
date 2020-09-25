@@ -50,6 +50,11 @@ elseif (file_exists($settingsfile)) {
 }
 
 echo "Using following parameters:\n";
-print_r($params);
+echo "===========================\n";
+foreach ($params as $key => $value) {
+  echo "$key: $value\n";
+}
+echo "===========================\n";
+echo "\n";
 
 return $params;
