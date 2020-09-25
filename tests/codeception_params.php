@@ -23,7 +23,6 @@ if (file_exists($propertiesfile)) {
   $params['WEBDRIVER_URL'] = 'http://' . $tos['tos.site.hostname'];
 }
 elseif (!empty($landoproperties)) {
-  print_r($landoproperties);
   $database = $landoproperties['database'];
   $creds = $database['creds'];
   $driver = $database['type'] === 'postgres' ? 'pgsql' : 'mysql';
