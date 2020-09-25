@@ -12,4 +12,4 @@ set -e
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)/../../.."
 
 echo "Run acceptance tests."
-lando codecept run acceptance
+lando codecept run acceptance --env=ci --xml --no-interaction --steps --debug
