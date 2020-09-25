@@ -7,6 +7,7 @@ use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Codeception\Module\OSDrupal\UserInfo;
 use Pages\UserLoginPage;
+use Pages\UserLogoutPage;
 
 /**
  * Class OSDrupalAcceptance.
@@ -115,6 +116,33 @@ class OSDrupalAcceptance extends Module {
       $webDriver->saveSessionSnapshot($name);
     }
     $this->amAdmin = ($name === $this->rootUser);
+  }
+
+  /**
+   * Log out the user.
+   *
+   * The name passed needs to correspond to the current user, since we will be
+   * deleting the session snapshot belonging to the user. Otherwise, the log out
+   * would not be complete and logging in would not go through the login form.
+   *
+   * @param string $name
+   *   User name.
+   *
+   * @throws \Codeception\Exception\ModuleException
+   */
+  public function logOut($name) {
+    $webDriver = $this->getWebDriver();
+
+    try {
+      $currentUrl = $webDriver->grabFromCurrentUrl();
+    }
+    catch (ModuleException $e) {
+      $currentUrl = '';
+    }
+
+    $webDriver->amOnPage(UserLogoutPage::URL . '?destination=' . $currentUrl);
+    $webDriver->deleteSessionSnapshot($name);
+    $this->amAdmin = FALSE;
   }
 
   /**
