@@ -10,7 +10,6 @@
 
 $params = [];
 
-$settingsfile = 'web/sites/default/settings.php';
 $propertiesfile = '../conf/tos.properties';
 $landoproperties = json_decode(getenv('LANDO_INFO'), TRUE);
 
@@ -33,18 +32,6 @@ elseif (!empty($landoproperties)) {
   $params['DB_PASSWORD'] = $creds['password'];
   $params['WEBDRIVER_URL'] = end($landoproperties['appserver']['urls']);
   $params['CHROMEDRIVER_HOST'] = 'chromedriver';
-}
-elseif (file_exists($settingsfile)) {
-  $databases = [];
-  // Read settings from the settings file.
-  @include $settingsfile;
-  if (isset($databases['default']['default'])) {
-    foreach (['database', 'username', 'password', 'host', 'port', 'driver'] as $field) {
-      if (isset($databases['default']['default'][$field])) {
-        $$field = $databases['default']['default'][$field];
-      }
-    }
-  }
 }
 
 echo "Using following parameters:\n";
