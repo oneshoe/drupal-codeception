@@ -30,7 +30,7 @@ elseif (!empty($landoproperties)) {
   $params['DB_DSN'] = $driver . ':host=' . $database['hostnames'][0] . ';dbname=' . $creds['database'];
   $params['DB_USER'] = $creds['user'];
   $params['DB_PASSWORD'] = $creds['password'];
-  $params['WEBDRIVER_URL'] = end($landoproperties['appserver']['urls']);
+  $params['WEBDRIVER_URL'] = 'http://appserver/';
   $params['CHROMEDRIVER_HOST'] = 'chromedriver';
 }
 
