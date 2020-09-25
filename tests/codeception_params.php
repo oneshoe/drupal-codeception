@@ -22,7 +22,6 @@ if (file_exists($propertiesfile)) {
   $params['DB_USER'] = $tos['tos.site.dbuname'];
   $params['DB_PASSWORD'] = $tos['tos.site.dbpass'];
   $params['WEBDRIVER_URL'] = 'http://' . $tos['tos.site.hostname'];
-  $params['HTTP_HOST'] = $tos['tos.site.hostname'];
 }
 elseif (!empty($landoproperties)) {
   print_r($landoproperties);
@@ -34,7 +33,6 @@ elseif (!empty($landoproperties)) {
   $params['DB_PASSWORD'] = $creds['password'];
   $params['WEBDRIVER_URL'] = end($landoproperties['appserver']['urls']);
   $params['CHROMEDRIVER_HOST'] = 'chromedriver';
-  $params['HTTP_HOST'] = substr($params['WEBDRIVER_URL'], strlen('https://'));
 }
 elseif (file_exists($settingsfile)) {
   $databases = [];
