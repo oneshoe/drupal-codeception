@@ -31,8 +31,8 @@ fi
 echo "Save the Lando logs."
 lando logs -t > ../testresults/lando.log
 
-log "Stop Lando."
+echo "Stop Lando."
 lando stop
 
-log "Destroy Lando environment."
+echo "Destroy Lando environment."
 lando destroy -y
