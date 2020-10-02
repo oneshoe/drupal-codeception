@@ -209,7 +209,11 @@ class OSDrupalAcceptance extends Module {
    *   Username.
    */
   public function deleteUser($name) {
-    $this->executeDrushCommand('user:cancel ' . $name);
+    // There is no direct way to delete a user, but it is just another entity,
+    // so we can use entity:delete instead.
+    $userInfo = json_decode($this->executeDrushCommand('user:information ' . $name, ['format' => 'json']), TRUE);
+    $userInfo = reset($userInfo);
+    $this->executeDrushCommand('entity:delete user ' . $userInfo['uid']);
   }
 
   /**
