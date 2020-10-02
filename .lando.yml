@@ -39,6 +39,8 @@ services:
       - pecl install pcov
     build:
       - composer install
+    config:
+      php: lando/php.ini
   chromedriver:
     type: compose
     services:
