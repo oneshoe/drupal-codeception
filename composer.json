@@ -25,11 +25,6 @@
         "drupal/core-composer-scaffold": "^8",
         "drupal/core-recommended": "^8"
     },
-    "scripts": {
-        "post-drupal-scaffold-cmd": [
-            "patch -p1 <patches/drupal-c3.patch"
-        ]
-    },
     "license": "GPL-2.0",
     "authors": [
         {
