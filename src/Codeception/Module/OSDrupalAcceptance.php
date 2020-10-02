@@ -7,6 +7,7 @@ use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Codeception\Module\OSDrupal\UserInfo;
 use Pages\UserLoginPage;
+use Pages\UserLogoutPage;
 
 /**
  * Class OSDrupalAcceptance.
@@ -118,6 +119,33 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
+   * Log out the user.
+   *
+   * The name passed needs to correspond to the current user, since we will be
+   * deleting the session snapshot belonging to the user. Otherwise, the log out
+   * would not be complete and logging in would not go through the login form.
+   *
+   * @param string $name
+   *   User name.
+   *
+   * @throws \Codeception\Exception\ModuleException
+   */
+  public function logOut($name) {
+    $webDriver = $this->getWebDriver();
+
+    try {
+      $currentUrl = $webDriver->grabFromCurrentUrl();
+    }
+    catch (ModuleException $e) {
+      $currentUrl = '';
+    }
+
+    $webDriver->amOnPage(UserLogoutPage::URL . '?destination=' . $currentUrl);
+    $webDriver->deleteSessionSnapshot($name);
+    $this->amAdmin = FALSE;
+  }
+
+  /**
    * Switch to admin user.
    *
    * @throws \Codeception\Exception\ModuleException
@@ -181,7 +209,11 @@ class OSDrupalAcceptance extends Module {
    *   Username.
    */
   public function deleteUser($name) {
-    $this->executeDrushCommand('user:cancel ' . $name);
+    // There is no direct way to delete a user, but it is just another entity,
+    // so we can use entity:delete instead.
+    $userInfo = json_decode($this->executeDrushCommand('user:information ' . $name, ['format' => 'json']), TRUE);
+    $userInfo = reset($userInfo);
+    $this->executeDrushCommand('entity:delete user ' . $userInfo['uid']);
   }
 
   /**
