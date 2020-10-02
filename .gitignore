@@ -1,7 +1,8 @@
-# Ignore directories added when installing dev dependencies.
+# Ignore directories and files added when installing dev dependencies.
 web
 vendor
 composer.lock
 /.editorconfig
 /.gitattributes
 .lando.local.yml
+/c3.php

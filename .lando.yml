@@ -6,7 +6,6 @@ config:
   php: 7.3
   via: apache:2.4
   database: mariadb
-  xdebug: true
 
 tooling:
   drush:
@@ -37,8 +36,11 @@ services:
   appserver:
     build_as_root:
       - curl -o /usr/local/share/ca-certificates/oneshoeCA.crt http://static.office.oneshoe.nl/ca.crt && update-ca-certificates
+      - pecl install pcov
     build:
       - composer install
+    config:
+      php: lando/php.ini
   chromedriver:
     type: compose
     services:

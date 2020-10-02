@@ -32,9 +32,6 @@ services:
 echo "Start Lando."
 lando start
 
-echo "Turn off XDebug."
-lando xdebug-off
-
 echo "Install composer dependencies."
 lando composer install
 
