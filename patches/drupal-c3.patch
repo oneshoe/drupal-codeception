@@ -1,0 +1,16 @@
+diff --git a/web/index.php b/web/index.php
+index 750dc282dc2004b5a9bace8f62d6735bef328372..07d21e6e153c41041145a39886b9f4b5babdaab5 100644
+--- a/web/index.php
++++ b/web/index.php
+@@ -11,6 +11,11 @@
+ use Drupal\Core\DrupalKernel;
+ use Symfony\Component\HttpFoundation\Request;
+ 
++define('C3_CODECOVERAGE_ERROR_LOG_FILE', '../logs/c3_error.log'); //Optional (if not set the default c3 output dir will be used)
++include '../c3.php';
++
++define('MY_APP_STARTED', true);
++
+ $autoloader = require_once 'autoload.php';
+ 
+ $kernel = new DrupalKernel('prod', $autoloader);

@@ -37,6 +37,7 @@ services:
   appserver:
     build_as_root:
       - curl -o /usr/local/share/ca-certificates/oneshoeCA.crt http://static.office.oneshoe.nl/ca.crt && update-ca-certificates
+      - pecl install pcov
     build:
       - composer install
   chromedriver:
