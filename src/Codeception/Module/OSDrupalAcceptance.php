@@ -218,16 +218,27 @@ class OSDrupalAcceptance extends Module {
 
   /**
    * Wait for the batch process to finish.
+   *
+   * @param string $successText
+   *   Text to check if the batch finished. Default: 'Status message' (hidden
+   *   default heading for Drupal status messages).
+   * @param string $failedText
+   *   Text that would indicate the batch failed. Default: 'Error message'
+   *   (hidden default heading for Drupal error messages). When made empty,
+   *   error condition will not be checked.
+   * @param int $timeout
+   *   Timeout in seconds to wait for the success message. Default: 90.
    */
-  public function waitForBatchProcessToFinish() {
-    $I = $this;
-
-    $uri = $I->grabFromCurrentUrl();
+  public function waitForBatchProcessToFinish($successText = 'Status message', $failedText = 'Error message', $timeout = 90) {
+    $webDriver = $this->getWebDriver();
+    $uri = $webDriver->grabFromCurrentUrl();
 
     if (strpos($uri, 'batch') !== FALSE) {
       // Wait for the batch process to finish.
-      $I->waitForText('Statusbericht', 90);
-      $I->dontSee('Foutmelding', 'h2');
+      $webDriver->waitForText($successText, $timeout);
+      if (!empty($failedText)) {
+        $webDriver->dontSee($failedText, 'h2');
+      }
     }
   }
 
