@@ -6,6 +6,8 @@ use Codeception\Exception\ModuleException;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Codeception\Module\OSDrupal\UserInfo;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverExpectedCondition;
 use Pages\UserLoginPage;
 use Pages\UserLogoutPage;
 
@@ -266,20 +268,22 @@ class OSDrupalAcceptance extends Module {
   /**
    * Enter a value in a CKEditor.
    *
-   * @param string $element_id
-   *   The id of the element without #.
+   * @param string $elementId
+   *   The id of the element (without #).
    * @param string $content
    *   The value to place into the editor.
    *
-   * @throws \Exception
+   * @throws \Codeception\Exception\ModuleException
+   * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+   * @throws \Facebook\WebDriver\Exception\TimeoutException
    */
-  public function fillCkEditorById($element_id, $content) {
-    $selector = WebDriverBy::cssSelector('#cke_' . $element_id . ' iframe');
+  public function fillCkEditorById($elementId, $content) {
+    $selector = WebDriverBy::cssSelector('#cke_' . $elementId . ' iframe');
     $webDriver = $this->getWebDriver()->webDriver;
     $webDriver->wait(10, 1000)->until(
       WebDriverExpectedCondition::presenceOfElementLocated($selector)
     );
-    $webDriver->executeScript("CKEDITOR.instances['$element_id'].setData('" . addslashes($content) . "');");
+    $webDriver->executeScript("CKEDITOR.instances['$elementId'].setData('" . addslashes($content) . "');");
   }
 
   /**
@@ -293,11 +297,10 @@ class OSDrupalAcceptance extends Module {
    * @throws \Exception
    */
   public function fillCkEditorByName($element_name, $content) {
-    // NOTE: This uses a different mechanism from fillCkEditorById(). The
-    // fillRteEditor() method has proved quite unstable, maybe the JS-based
-    // approach in fillCkEditorById() is more succesful. You may want to try and
-    // port this to the same mechanism if you find yourself needing this.
     $selector = WebDriverBy::cssSelector('textarea[name="' . $element_name . '"] + .cke iframe');
+    $webDriver = $this->getWebDriver();
+    $element = $webDriver->_findElements($selector);
+    var_dump($element);
     $this->fillRteEditor($selector, $content);
   }
 
