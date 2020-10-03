@@ -302,52 +302,6 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
-   * Enter a value in a TinyMceEditor.
-   *
-   * @param string $id
-   *   The id of the element.
-   * @param string $content
-   *   The value to place into the editor.
-   *
-   * @throws \Exception
-   */
-  public function fillTinyMceEditorById($id, $content) {
-    $this->fillTinyMceEditor('id', $id, $content);
-  }
-
-  /**
-   * Enter a value in a TinyMceEditor.
-   *
-   * @param string $name
-   *   The name of the element.
-   * @param string $content
-   *   The value to place into the editor.
-   *
-   * @throws \Exception
-   */
-  public function fillTinyMceEditorByName($name, $content) {
-    $this->fillTinyMceEditor('name', $name, $content);
-  }
-
-  /**
-   * Enter a value in a TinyMceEditor.
-   *
-   * @param string $attribute
-   *   The attribute to check.
-   * @param string $value
-   *   The value to match the attribute on.
-   * @param string $content
-   *   The value to place into the editor.
-   *
-   * @throws \Exception
-   */
-  private function fillTinyMceEditor($attribute, $value, $content) {
-    $xpath = '//textarea[@' . $attribute . '=\'' . $value . '\']/../div[contains(@class, \'mce-tinymce\')]//iframe';
-    $selector = WebDriverBy::xpath($xpath);
-    $this->fillRteEditor($selector, $content);
-  }
-
-  /**
    * Enter a value in a richt text editor.
    *
    * @param \Facebook\WebDriver\WebDriverBy $selector
