@@ -2,7 +2,7 @@
 
 class EditorCest
 {
-  public function filCkEditorById(AcceptanceTester $I)
+  public function fillCkEditorById(AcceptanceTester $I)
   {
     $I->switchToAdmin();
     $I->amOnPage('/node/add/article');
@@ -14,7 +14,7 @@ class EditorCest
     $I->see("Article $nodeTitle has been created.");
   }
 
-  public function filCkEditorByName(AcceptanceTester $I)
+  public function fillCkEditorByName(AcceptanceTester $I)
   {
     $I->switchToAdmin();
     $I->amOnPage('/node/add/article');
