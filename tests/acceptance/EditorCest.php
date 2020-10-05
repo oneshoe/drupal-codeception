@@ -6,7 +6,7 @@ class EditorCest
   {
     $I->switchToAdmin();
     $I->amOnPage('/node/add/article');
-    $content = readfile(__DIR__ . '/../_data/basic.html');
+    $content = file_get_contents(__DIR__ . '/../_data/basic.html');
     $nodeTitle = $I->generateNodeTitle();
     $I->fillField('#edit-title-0-value', $nodeTitle);
     $I->fillCkEditorById('edit-body-0-value', $content);
@@ -18,7 +18,7 @@ class EditorCest
   {
     $I->switchToAdmin();
     $I->amOnPage('/node/add/article');
-    $content = readfile(__DIR__ . '/../_data/basic.html');
+    $content = file_get_contents(__DIR__ . '/../_data/basic.html');
     $nodeTitle = $I->generateNodeTitle();
     $I->fillField('#edit-title-0-value', $nodeTitle);
     $I->fillCkEditorByName('edit-body-0-value', $content);
