@@ -21,7 +21,7 @@ class EditorCest
     $content = file_get_contents(__DIR__ . '/../_data/basic.html');
     $nodeTitle = $I->generateNodeTitle();
     $I->fillField('#edit-title-0-value', $nodeTitle);
-    $I->fillCkEditorByName('edit-body-0-value', $content);
+    $I->fillCkEditorByName('body[0][value]', $content);
     $I->click('Save');
     $I->see("Article $nodeTitle has been created.");
   }
