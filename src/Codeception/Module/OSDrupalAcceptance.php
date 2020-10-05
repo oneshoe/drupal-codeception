@@ -283,7 +283,7 @@ class OSDrupalAcceptance extends Module {
     $webDriver->wait(10, 1000)->until(
       WebDriverExpectedCondition::presenceOfElementLocated($selector)
     );
-    $webDriver->executeScript("CKEDITOR.instances['$elementId'].setData('" . addslashes($content) . "');");
+    $webDriver->executeScript("CKEDITOR.instances['$elementId'].setData('" . json_encode($content) . "');");
   }
 
   /**
