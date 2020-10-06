@@ -6,6 +6,7 @@ use Codeception\Exception\ModuleException;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Codeception\Module\OSDrupal\UserInfo;
+use Codeception\TestInterface;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Pages\UserLoginPage;
@@ -78,6 +79,12 @@ class OSDrupalAcceptance extends Module {
       'test-users:delete-with-role ' . $this->testRole . ' -y' => [],
       'role:delete ' . $this->testRole . ' -y' => [],
     ]);
+  }
+
+  public function _after(TestInterface $test) {
+    // All sessions will be ended after each test, so we need to record we are
+    // no longer admin.
+    $this->amAdmin = FALSE;
   }
 
   /**
