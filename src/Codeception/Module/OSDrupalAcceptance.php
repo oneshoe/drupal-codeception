@@ -310,36 +310,6 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
-   * Enter a value in a richt text editor.
-   *
-   * @param \Facebook\WebDriver\WebDriverBy $selector
-   *   The selector to use.
-   * @param string $content
-   *   The value to place into the editor.
-   *
-   * @throws \Exception
-   */
-  private function fillRteEditor(WebDriverBy $selector, $content) {
-    $webDriver = $this->getWebDriver()->webDriver;
-    $webDriver->wait(10, 1000)->until(
-      WebDriverExpectedCondition::presenceOfElementLocated($selector)
-    );
-    $frame = $webDriver->findElement($selector);
-    $webDriver->switchTo()->frame($frame);
-
-    $script = 'arguments[0].innerHTML = "' . addslashes($content) . '"';
-    $by = WebDriverBy::tagName('body');
-    $remoteWebElement = $webDriver->findElement($by);
-    $webDriver->executeScript($script, [$remoteWebElement]);
-    // Wait for a little bit, to make sure the content has been set.
-    // Not sure if this works, but these calls keep failing once every few
-    // tests.
-    $webDriver->wait(1);
-
-    $webDriver->switchTo()->defaultContent();
-  }
-
-  /**
    * Execute multiple Drush commands.
    *
    * @param array $commands
