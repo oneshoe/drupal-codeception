@@ -6,6 +6,9 @@ use Codeception\Exception\ModuleException;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Codeception\Module\OSDrupal\UserInfo;
+use Codeception\TestInterface;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverExpectedCondition;
 use Pages\UserLoginPage;
 use Pages\UserLogoutPage;
 
@@ -76,6 +79,12 @@ class OSDrupalAcceptance extends Module {
       'test-users:delete-with-role ' . $this->testRole . ' -y' => [],
       'role:delete ' . $this->testRole . ' -y' => [],
     ]);
+  }
+
+  public function _after(TestInterface $test) {
+    // All sessions will be ended after each test, so we need to record we are
+    // no longer admin.
+    $this->amAdmin = FALSE;
   }
 
   /**
@@ -275,117 +284,51 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
-   * Enter a value in a CKEditor.
+   * Enter a value in a Rich Text Editor by the ID.
    *
-   * @param string $element_id
-   *   The id of the element without #.
+   * Currently only works with CK Editor. In case other editors should be
+   * supported, we should probably implement some sore of driver mechanism so
+   * the editor to use can be controlled in config files and optionally from
+   * calling the methods, in case multiple editors are in use on the same site.
+   *
+   * @param string $elementId
+   *   The id of the element (without #).
    * @param string $content
    *   The value to place into the editor.
    *
-   * @throws \Exception
+   * @throws \Codeception\Exception\ModuleException
+   * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+   * @throws \Facebook\WebDriver\Exception\TimeoutException
    */
-  public function fillCkEditorById($element_id, $content) {
-    $selector = WebDriverBy::cssSelector('#cke_' . $element_id . ' iframe');
+  public function fillRichTextEditorById($elementId, $content) {
+    $selector = WebDriverBy::cssSelector('#cke_' . $elementId . ' iframe');
     $webDriver = $this->getWebDriver()->webDriver;
     $webDriver->wait(10, 1000)->until(
       WebDriverExpectedCondition::presenceOfElementLocated($selector)
     );
-    $webDriver->executeScript("CKEDITOR.instances['$element_id'].setData('" . addslashes($content) . "');");
+    $webDriver->executeScript("CKEDITOR.instances['$elementId'].setData('" . json_encode($content) . "');");
   }
 
   /**
-   * Enter a value in a CKEditor.
+   * Enter a value in a Rich Text Editor by the name of the form element.
+   *
+   * Currently only works with CK Editor.
    *
    * @param string $element_name
    *   The name of the element.
    * @param string $content
    *   The value to place into the editor.
    *
-   * @throws \Exception
+   * @throws \Codeception\Exception\ModuleException
+   * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+   * @throws \Facebook\WebDriver\Exception\TimeoutException
+   *
+   * @see \Codeception\Module\OSDrupalAcceptance::fillRichTextEditorById
    */
-  public function fillCkEditorByName($element_name, $content) {
-    // NOTE: This uses a different mechanism from fillCkEditorById(). The
-    // fillRteEditor() method has proved quite unstable, maybe the JS-based
-    // approach in fillCkEditorById() is more succesful. You may want to try and
-    // port this to the same mechanism if you find yourself needing this.
-    $selector = WebDriverBy::cssSelector('textarea[name="' . $element_name . '"] + .cke iframe');
-    $this->fillRteEditor($selector, $content);
-  }
-
-  /**
-   * Enter a value in a TinyMceEditor.
-   *
-   * @param string $id
-   *   The id of the element.
-   * @param string $content
-   *   The value to place into the editor.
-   *
-   * @throws \Exception
-   */
-  public function fillTinyMceEditorById($id, $content) {
-    $this->fillTinyMceEditor('id', $id, $content);
-  }
-
-  /**
-   * Enter a value in a TinyMceEditor.
-   *
-   * @param string $name
-   *   The name of the element.
-   * @param string $content
-   *   The value to place into the editor.
-   *
-   * @throws \Exception
-   */
-  public function fillTinyMceEditorByName($name, $content) {
-    $this->fillTinyMceEditor('name', $name, $content);
-  }
-
-  /**
-   * Enter a value in a TinyMceEditor.
-   *
-   * @param string $attribute
-   *   The attribute to check.
-   * @param string $value
-   *   The value to match the attribute on.
-   * @param string $content
-   *   The value to place into the editor.
-   *
-   * @throws \Exception
-   */
-  private function fillTinyMceEditor($attribute, $value, $content) {
-    $xpath = '//textarea[@' . $attribute . '=\'' . $value . '\']/../div[contains(@class, \'mce-tinymce\')]//iframe';
-    $selector = WebDriverBy::xpath($xpath);
-    $this->fillRteEditor($selector, $content);
-  }
-
-  /**
-   * Enter a value in a richt text editor.
-   *
-   * @param \Facebook\WebDriver\WebDriverBy $selector
-   *   The selector to use.
-   * @param string $content
-   *   The value to place into the editor.
-   *
-   * @throws \Exception
-   */
-  private function fillRteEditor(WebDriverBy $selector, $content) {
-    $webDriver = $this->getWebDriver()->webDriver;
-    $webDriver->wait(10, 1000)->until(
-      WebDriverExpectedCondition::presenceOfElementLocated($selector)
-    );
-    $frame = $webDriver->findElement($selector);
-    $webDriver->switchTo()->frame($frame);
-
-    $script = 'arguments[0].innerHTML = "' . addslashes($content) . '"';
-    $by = WebDriverBy::tagName('body');
-    $remoteWebElement = $webDriver->findElement($by);
-    $webDriver->executeScript($script, [$remoteWebElement]);
-    // Wait for a little bit, to make sure the content has been set.
-    // Not sure if this works, but these calls keep failing once every few
-    // tests.
-    $webDriver->wait(1);
-
-    $webDriver->switchTo()->defaultContent();
+  public function fillRichTextEditorByName($element_name, $content) {
+    $webDriver = $this->getWebDriver();
+    $id = $webDriver->grabAttributeFrom('textarea[name="' . $element_name . '"]', 'data-drupal-selector');
+    $this->fillRichTextEditorById($id, $content);
   }
 
   /**
