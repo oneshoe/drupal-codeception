@@ -6,6 +6,13 @@
 # Stop on any error.
 set -e
 
+# Allow a delay to be introduced in order to help Lando starts not happening
+# simultaneously.
+if [ -z ${START_DELAY+x} ]; then
+  echo "Wait for ${START_DELAY} seconds..."
+  sleep "${START_DELAY}"
+fi
+
 "$(cd -P -- "$(dirname -- "$0")" && pwd -P)/../setup-environment.sh"
 # Running the above script will have moved us to the checkout directory.
 
