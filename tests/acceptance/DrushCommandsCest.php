@@ -16,6 +16,8 @@ class DrushCommandsCest
     $output = $I->executeDrushCommands($commands);
     $I->assertIsArray($output);
     $I->assertCount(count($commands), $output);
+    $statusOutput = reset($output);
+    $I->assertStringContainsString('Drupal bootstrap : Successful', $statusOutput);
   }
 
 }
