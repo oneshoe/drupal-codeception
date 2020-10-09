@@ -11,5 +11,14 @@ set -e
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)/../../.."
 
+echo "Install composer dependencies."
+lando composer install
+
+echo "Install Drupal."
+lando clean-install
+
+echo "Set logging to verbose."
+lando drush cset system.logging error_level verbose -y
+
 echo "Run acceptance tests."
 lando codecept run acceptance --env=ci --xml --no-interaction --steps --debug
