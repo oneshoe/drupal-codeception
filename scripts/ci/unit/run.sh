@@ -8,7 +8,7 @@ set -e
 
 # Allow a delay to be introduced in order to help Lando starts not happening
 # simultaneously.
-if [ -n ${START_DELAY+x} ]; then
+if [ -n "${START_DELAY+x}" ]; then
   echo "Wait for ${START_DELAY} seconds..."
   sleep "${START_DELAY}"
 fi
