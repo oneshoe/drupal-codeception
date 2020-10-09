@@ -32,5 +32,8 @@ services:
 echo "Start Lando."
 lando start
 
+echo "Install composer dependencies."
+lando composer install
+
 echo "Copy composer.lock so we know what the status quo is."
 cp composer.lock ../testresults/

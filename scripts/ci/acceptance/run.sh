@@ -11,9 +11,6 @@ set -e
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)/../../.."
 
-echo "Install composer dependencies."
-lando composer install
-
 echo "Install Drupal."
 lando clean-install
 
