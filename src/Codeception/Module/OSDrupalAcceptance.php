@@ -304,11 +304,9 @@ class OSDrupalAcceptance extends Module {
    * @throws \Exception
    */
   public function fillCkEditorByName($element_name, $content) {
-    $selector = WebDriverBy::cssSelector('textarea[name="' . $element_name . '"] + .cke iframe');
     $webDriver = $this->getWebDriver();
-    $element = $webDriver->_findElements($selector);
-    var_dump($element);
-    $this->fillRteEditor($selector, $content);
+    $id = $webDriver->grabAttributeFrom('textarea[name="' . $element_name . '"]', 'data-drupal-selector');
+    $this->fillCkEditorById($id, $content);
   }
 
   /**
