@@ -334,16 +334,33 @@ class OSDrupalAcceptance extends Module {
   /**
    * Execute multiple Drush commands.
    *
+   * A convenience method to execute multiple drush commands at once.
+   * No return value, if you need that
+   *
    * @param array $commands
-   *   An array describing the commands. Keys are the command with any
-   *   arguments, values are arrays of options. The options will be
+   *   An array describing the commands. Each value is an array, with the first
+   *   value being a string containing the command with any arguments, the
+   *   optional second value is an array of options. The options will be
    *   augmented with the proper root directory and uri.
+   *
+   * @return array
+   *   Array of command output.
    */
   public function executeDrushCommands($commands) {
-    foreach ($commands as $command => $options) {
-      $output = $this->executeDrushCommand($command, $options);
-      codecept_debug($output);
+    $output = [];
+    foreach ($commands as $commandArray) {
+      if (count($commandArray) > 1) {
+        list($command, $options) = $commandArray;
+      }
+      else {
+        $command = reset($commandArray);
+        $options = [];
+      }
+
+      $output[] = $this->executeDrushCommand($command, $options);
     }
+
+    return $output;
   }
 
   /**
