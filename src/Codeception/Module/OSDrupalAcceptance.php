@@ -273,7 +273,12 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
-   * Enter a value in a CKEditor.
+   * Enter a value in a Rich Text Editor by the ID.
+   *
+   * Currently only works with CK Editor. In case other editors should be
+   * supported, we should probably implement some sore of driver mechanism so
+   * the editor to use can be controlled in config files and optionally from
+   * calling the methods, in case multiple editors are in use on the same site.
    *
    * @param string $elementId
    *   The id of the element (without #).
@@ -284,7 +289,7 @@ class OSDrupalAcceptance extends Module {
    * @throws \Facebook\WebDriver\Exception\NoSuchElementException
    * @throws \Facebook\WebDriver\Exception\TimeoutException
    */
-  public function fillCkEditorById($elementId, $content) {
+  public function fillRichTextEditorById($elementId, $content) {
     $selector = WebDriverBy::cssSelector('#cke_' . $elementId . ' iframe');
     $webDriver = $this->getWebDriver()->webDriver;
     $webDriver->wait(10, 1000)->until(
@@ -294,19 +299,25 @@ class OSDrupalAcceptance extends Module {
   }
 
   /**
-   * Enter a value in a CKEditor.
+   * Enter a value in a Rich Text Editor by the name of the form element.
+   *
+   * Currently only works with CK Editor.
    *
    * @param string $element_name
    *   The name of the element.
    * @param string $content
    *   The value to place into the editor.
    *
-   * @throws \Exception
+   * @throws \Codeception\Exception\ModuleException
+   * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+   * @throws \Facebook\WebDriver\Exception\TimeoutException
+   *
+   * @see \Codeception\Module\OSDrupalAcceptance::fillRichTextEditorById
    */
-  public function fillCkEditorByName($element_name, $content) {
+  public function fillRichTextEditorByName($element_name, $content) {
     $webDriver = $this->getWebDriver();
     $id = $webDriver->grabAttributeFrom('textarea[name="' . $element_name . '"]', 'data-drupal-selector');
-    $this->fillCkEditorById($id, $content);
+    $this->fillRichTextEditorById($id, $content);
   }
 
   /**
