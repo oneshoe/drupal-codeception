@@ -9,7 +9,7 @@ class Unit extends \Codeception\Module {
   use CoverageTrait;
 
   public function _beforeSuite($settings = []) {
-    $this->startCoverage();
+    $this->startCoverage([], ['/app/src/Codeception/Module/OSDrupal/UserInfo.php']);
   }
 
   public function _afterSuite() {
