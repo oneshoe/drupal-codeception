@@ -11,7 +11,7 @@ To use, add the following repository definition to your composer.json:
         }
     ]
 
-Then, require `oneshoe/drupal-codeception-extension:dev-master`.
+Then, require `oneshoe/drupal-codeception:dev-master`.
 
 ## Configuring Codeception
 To add to Codeption, make the following changes to your test suite files.
