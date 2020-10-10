@@ -45,10 +45,9 @@ trait CoverageTrait {
 
   protected function stopCoverage() {
     $this->coverage->stop();
-    $location = '/app/tests/_output/coverage' . $this->_getName();
-    (new HtmlReport)->process($this->coverage, $location);
-    $xmlName = $location . '/coverage.xml';
-    (new Clover())->process($this->coverage, $xmlName);
+
+    (new HtmlReport)->process($this->coverage, '/app/tests/_output/coverage');
+    (new Clover())->process($this->coverage, '/app/tests/_output/coverage/coverage.xml');
   }
 
 }
