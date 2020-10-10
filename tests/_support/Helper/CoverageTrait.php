@@ -20,9 +20,20 @@ trait CoverageTrait {
 
   protected $coverage;
 
-  protected function startCoverage() {
+  protected function startCoverage($directories = [], $files = []) {
     $filter = new Filter;
-    $filter->includeDirectory('/app/src');
+
+    if (empty($directories) && empty($files)) {
+      $filter->includeDirectory('/app/src');
+    }
+    else {
+      foreach ($directories as $directory) {
+        $filter->includeDirectory($directory);
+      }
+      foreach ($files as $file) {
+        $filter->includeFile($file);
+      }
+    }
 
     $this->coverage = new CodeCoverage(
       (new Selector)->forLineCoverage($filter),
