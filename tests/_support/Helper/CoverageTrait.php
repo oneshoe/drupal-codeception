@@ -24,7 +24,7 @@ trait CoverageTrait {
     $filter = new Filter;
 
     if (empty($directories) && empty($files)) {
-      $filter->includeDirectory('/app/src');
+      $filter->includeDirectory(__DIR__ . '../../../src');
     }
     else {
       foreach ($directories as $directory) {
@@ -46,8 +46,9 @@ trait CoverageTrait {
   protected function stopCoverage() {
     $this->coverage->stop();
 
-    (new HtmlReport)->process($this->coverage, '/app/tests/_output/coverage');
-    (new Clover())->process($this->coverage, '/app/tests/_output/coverage/coverage.xml');
+    $target = __DIR__ . '/../../_output/coverage';
+    (new HtmlReport)->process($this->coverage, $target);
+    (new Clover())->process($this->coverage, $target . '/coverage.xml');
   }
 
 }

@@ -3,8 +3,10 @@
 # To be run at the top level working directory that holds a checkout of the
 # repository named "checkout".
 
-# Stop on any error.
-set -e
+source "$(dirname "$0")/docker-common.sh"
+
+# Do not stop on any error, we at the very least need to shut down the docker
+# environment.
 
 echo "Take ownership."
 sudo chown -R bamboo:bamboo .
@@ -18,21 +20,18 @@ else
   touch testresults/coverage/coverage.xml
 fi
 
-cd checkout
+cd checkout || exit 2
 
-if [ -z ${DUMP_NAME+x} ]; then
-  echo "Skipping database dump. Set DUMP_NAME to create a dump."
+if [ -z ${DB_DUMP_NAME+x} ]; then
+  echo "Skipping database dump. Set DB_DUMP_NAME to create a dump."
 else
   echo "Create a dump of the database for inspection."
-  lando db-export "${DB_DUMP_NAME}.sql"
-  mv "${DB_DUMP_NAME}.sql" ../testresults
+  ${dockerComposeCmd} exec -T php drush sql-dump --gzip --result-file=../${DB_DUMP_NAME}.sql
+  mv "${DB_DUMP_NAME}.sql.gz" ../testresults
 fi
 
-echo "Save the Lando logs."
-lando logs -t > ../testresults/lando.log
+echo "Save the Docker logs."
+${dockerComposeCmd} logs --no-color -t > ../testresults/docker.log
 
-echo "Stop Lando."
-lando stop
-
-echo "Destroy Lando environment."
-lando destroy -y
+echo "Stop Docker environment."
+${dockerComposeCmd} down --rmi local -v --remove-orphans

@@ -1,0 +1,108 @@
+version: "3"
+
+services:
+  database:
+    image: 'bitnami/mysql:5.7'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: drupal8
+      MYSQL_USER: drupal8
+      MYSQL_PASSWORD: drupal8
+      MYSQL_INNODB_BUFFER_POOL_SIZE: 384M
+      MYSQL_INNODB_LOCK_WAIT_TIMEOUT: 180
+
+  php:
+    # When making changes here, also make the same changes to the php_test
+    # service.
+# 1. Images with vanilla Drupal – wodby/drupal:[DRUPAL_VERSION]-[PHP_VERSION]-[STABILITY_TAG].
+#    image: wodby/drupal:8-7.1-2.4.4
+#    image: wodby/drupal:8-7.0-2.4.4
+#    image: wodby/drupal:7-7.1-2.4.4
+#    image: wodby/drupal:7-7.0-2.4.4
+#    image: wodby/drupal:7-5.6-2.4.4
+#    image: wodby/drupal:6-5.6-2.4.4
+#    image: wodby/drupal:6-5.3-2.4.4
+# 2. Images without Drupal – wodby/drupal-php:[PHP_VERSION]-[STABILITY_TAG].
+#    image: wodby/drupal-php:7.1-2.4.3
+    image: wodby/drupal-php:7.3-4.24.1
+#    image: wodby/drupal-php:5.6-2.4.3
+#    image: wodby/drupal-php:5.3-2.4.3
+    environment:
+      - "PHP_SENDMAIL_PATH=\"/usr/sbin/sendmail -t -i -S mailhog:1025\""
+      - DB_HOST=database
+      - DB_USER=drupal
+      - DB_PASSWORD=drupal
+      - DB_NAME=drupal
+      - DB_DRIVER=mysql
+      - CHROMEDRIVER_HOST=chromedriver
+      - PHP_FPM_CLEAR_ENV=no
+      - PHP_MEMORY_LIMIT=1536M
+      - PHP_CLI_MEMORY_LIMIT=1536M
+      - PHP_PCOV_ENABLED=1
+      - PHP_PCOV_DIRECTORY="/var/www/html/src"
+      # We need to override this setting because using the default value of
+      # "unused" breaks stuff. See https://github.com/wodby/php/pull/153.
+      - PHP_PCOV_EXCLUDE=""
+    volumes:
+      - ../:/var/www/html
+      - /etc/ssl/certs/:/usr/local/share/ca-certificates/
+
+  apache:
+    image: wodby/drupal-apache:2.4-1.0.2
+    depends_on:
+      - php
+    environment:
+      APACHE_LOG_LEVEL: debug
+      APACHE_BACKEND_HOST: php
+      APACHE_SERVER_ROOT: /var/www/html/web
+    volumes:
+      - ../:/var/www/html
+
+  mailhog:
+    image: mailhog/mailhog
+
+#  nodejs:
+#    image: wodby/drupal-node:1.0-1.0.0
+#    environment:
+#       NODE_SERVICE_KEY: node-service-key
+#    labels:
+#      - 'traefik.backend=nodejs'
+#      - 'traefik.port=8080'
+#      - 'traefik.frontend.rule=Host:nodejs.drupal.docker.localhost'
+#    volumes:
+#      - ./path/to/your/single-page-app:/app
+#    command: sh -c 'npm install && npm run start'
+
+#  node:
+#    image: node:alpine
+#    working_dir: /app
+#    labels:
+#      - 'traefik.backend=node'
+#      - 'traefik.port=3000'
+#      - 'traefik.frontend.rule=Host:front.drupal.docker.localhost'
+#    expose:
+#      - "3000"
+#    volumes:
+#      - ./path/to/your/single-page-app:/app
+#    command: sh -c 'npm install && npm run start'
+
+#  memcached:
+#    image: wodby/memcached:1.4-2.0.0
+
+#  rsyslog:
+#    image: wodby/rsyslog
+
+  chromedriver:
+    image: robcherry/docker-chromedriver
+    # See https://github.com/RobCherry/docker-chromedriver/issues/7
+    privileged: true
+    environment:
+      # Override the container defaults to play nice with Codeception.
+      CHROMEDRIVER_URL_BASE: "/wd/hub"
+      CHROMEDRIVER_WHITELISTED_IPS: ""
+
+#volumes:
+#  codebase:
+## Docker-sync for macOS users
+#  docker-sync:
+#    external: true

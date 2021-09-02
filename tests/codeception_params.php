@@ -32,6 +32,13 @@ elseif (!empty($landoproperties)) {
   $params['WEBDRIVER_URL'] = 'http://appserver/';
   $params['CHROMEDRIVER_HOST'] = 'chromedriver';
 }
+else {
+  // Otherwise, use the values required for Docker.
+  $params['DB_DSN'] = 'mysql:host=database;dbname=drupal8';
+  $params['DB_USER'] = 'drupal8';
+  $params['DB_PASSWORD'] = 'drupal8';
+  $params['WEBDRIVER_URL'] = 'http://apache/';
+}
 
 echo "Using following parameters:\n";
 echo "===========================\n";
