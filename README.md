@@ -14,11 +14,19 @@ To use, add the following repository definition to your composer.json:
 Then, require `oneshoe/drupal-codeception:dev-master`.
 
 ## Configuring Codeception
-To add to Codeption, make the following changes to your test suite files.
+To add to Codeception, make the following changes to your test suite files. The
+OSDrupalAcceptance depends on several other modules. These need to be added to
+the suite explicitly, and *in the correct order*, or they may not be found yet 
+when they are needed.
 
 ### acceptance.suite.yml
     modules:
         enabled:
+            - WebDriver
+                # Refer to https://codeception.com/docs/modules/WebDriver for
+                # configurarion instructions.
+                # ...
+            - DrupalDrush
             - DrupalAcceptance
             - OSDrupalAcceptance:
                   rootUser: [name of the root (uid 1) user]
