@@ -115,28 +115,6 @@ class OSDrupalFunctional extends Module
   }
 
   /**
-   * Setup Test environment.
-   *
-   * @param array $settings
-   */
-  public function _beforeSuite($settings = [])
-  {
-    if ($this->config['create_users']) {
-      $this->scaffoldTestUsers();
-    }
-  }
-
-  /**
-   * Tear down after tests.
-   */
-  public function _afterSuite()
-  {
-    if ($this->config['destroy_users']) {
-      $this->tearDownTestUsers();
-    }
-  }
-
-  /**
    * Start a drupal database transaction.
    *
    * @param string $name
