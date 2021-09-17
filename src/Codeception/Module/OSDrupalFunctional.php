@@ -8,8 +8,8 @@ use Codeception\Module;
 use Codeception\TestDrupalKernel;
 use Codeception\TestInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Database\Database;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -25,6 +25,11 @@ class OSDrupalFunctional extends Module
    * @var int
    */
   protected $watchdog;
+
+  /**
+   * @var \Drupal\Core\Database\Transaction
+   */
+  private $transaction;
 
   /**
    * Drupal8Module constructor.
@@ -55,10 +60,10 @@ class OSDrupalFunctional extends Module
 
     // Bootstrap a bare minimum Kernel so we can interact with Drupal.
     $class_loader = require $app_root . '/autoload.php';
-    $kernel = new TestDrupalKernel($environment, $class_loader, true, $app_root);
+    $kernel = new TestDrupalKernel($environment, $class_loader, $app_root);
     // Drupal still doesn't work quite right when you don't.
     chdir($app_root);
-    $kernel->bootTestEnvironment($site_path);
+    $kernel->bootTestEnvironment($site_path, new Request());
   }
 
   /**
