@@ -30,6 +30,5 @@ chmod a+w -R *
 echo "Set logging to verbose."
 ${dockerComposeCmd} exec -T php bash -c "cd web && ../vendor/bin/drush cset system.logging error_level verbose -y"
 
-# Note: this is a dummy script that does not do anything yet, but allows us to
-# set up functional tests in Bamboo.
-exit 0
+echo "Run functional tests."
+${dockerComposeCmd} exec -T php vendor/bin/codecept run functional --env=ci --xml --no-interaction --steps --debug
