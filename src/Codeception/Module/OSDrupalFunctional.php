@@ -73,13 +73,6 @@ class OSDrupalFunctional extends Module
    */
   public function _before(TestInterface $test)
   {
-    $app_root = realpath($this->config['app_root']);
-    $class_loader = require $app_root . '/autoload.php';
-    $kernel = new TestDrupalKernel($this->config['environment'], $class_loader, false, $app_root);
-    $kernel->setSitePath($this->config['site_path']);
-    $request = Request::create('/');
-    $kernel->prepareLegacyRequest($request);
-
     // Clean up everything, slow but thorough.
     if ($this->config['clear_caches']) {
       $module_handler = \Drupal::moduleHandler();
@@ -99,7 +92,7 @@ class OSDrupalFunctional extends Module
     $this->watchdog = \Drupal::database()
       ->query('SELECT MAX(wid) FROM {watchdog}')
       ->fetchField();
-    \Drupal::getContainer()->get('path.alias_manager')->cacheClear();
+    \Drupal::getContainer()->get('path_alias.manager')->cacheClear();
     $this->startTransaction();
   }
 
