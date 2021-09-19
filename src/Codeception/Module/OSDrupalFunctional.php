@@ -7,8 +7,11 @@ use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Codeception\TestDrupalKernel;
 use Codeception\TestInterface;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Database\InvalidQueryException;
+use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -173,7 +176,7 @@ class OSDrupalFunctional extends Module
         $log .= implode(' ', $items) . PHP_EOL;
       }
       if (!empty($log)) {
-        $file = codecept_output_dir() . get_class($this) . '.drupallog';
+        $file = codecept_output_dir() . 'drupalwatchdog.log';
         $content = '[[[ DRUPAL WATCHDOG ]]]' . PHP_EOL;
         $trimmarker = PHP_EOL . '>>>>rest of string cut off. Full log: ' . $file;
         $content .= mb_strimwidth($log, 0, 500, $trimmarker);
