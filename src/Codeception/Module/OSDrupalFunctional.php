@@ -55,7 +55,12 @@ class OSDrupalFunctional extends Module
     parent::__construct($container, $new_config);
   }
 
-  public function _initialize()
+  /**
+   * Create a cleanly booted environemnt for every test.
+   *
+   * @param TestInterface $test
+   */
+  public function _before(TestInterface $test)
   {
     $site_path = $this->config['site_path'];
     $app_root = realpath($this->config['app_root']);
@@ -67,15 +72,7 @@ class OSDrupalFunctional extends Module
     // Drupal still doesn't work quite right when you don't.
     chdir($app_root);
     $kernel->bootTestEnvironment($site_path, new Request());
-  }
 
-  /**
-   * Create a cleanly booted environemnt for every test.
-   *
-   * @param TestInterface $test
-   */
-  public function _before(TestInterface $test)
-  {
     // Clean up everything, slow but thorough.
     if ($this->config['clear_caches']) {
       $module_handler = \Drupal::moduleHandler();
@@ -95,7 +92,7 @@ class OSDrupalFunctional extends Module
     $this->watchdog = \Drupal::database()
       ->query('SELECT MAX(wid) FROM {watchdog}')
       ->fetchField();
-    \Drupal::getContainer()->get('path_alias.manager')->cacheClear();
+    \Drupal::getContainer()->get('path.alias_manager')->cacheClear();
     $this->startTransaction();
   }
 
