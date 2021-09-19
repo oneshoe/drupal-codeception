@@ -55,13 +55,7 @@ class OSDrupalFunctional extends Module
     parent::__construct($container, $new_config);
   }
 
-  /**
-   * Create a cleanly booted environemnt for every test.
-   *
-   * @param TestInterface $test
-   */
-  public function _before(TestInterface $test)
-  {
+  public function _initialize() {
     $site_path = $this->config['site_path'];
     $app_root = realpath($this->config['app_root']);
     $environment = $this->config['environment'];
@@ -72,6 +66,17 @@ class OSDrupalFunctional extends Module
     // Drupal still doesn't work quite right when you don't.
     chdir($app_root);
     $kernel->bootTestEnvironment($site_path, new Request());
+  }
+
+  /**
+   * Create a cleanly booted environemnt for every test.
+   *
+   * @param TestInterface $test
+   */
+  public function _before(TestInterface $test)
+  {
+    // Run the same code as initialize to het a clean environment every time.
+    $this->_initialize();
 
     // Clean up everything, slow but thorough.
     if ($this->config['clear_caches']) {
