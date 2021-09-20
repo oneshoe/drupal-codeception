@@ -65,7 +65,10 @@ class OSDrupalFunctional extends Module
     $kernel = new TestDrupalKernel($environment, $class_loader, $app_root);
     // Drupal still doesn't work quite right when you don't.
     chdir($app_root);
-    $kernel->bootTestEnvironment($site_path, new Request());
+    // Boot the test environment with a dummy request to make sure stuff like
+    // the request time is in place.
+    $request = Request::create('/');
+    $kernel->bootTestEnvironment($site_path, $request);
   }
 
   /**
