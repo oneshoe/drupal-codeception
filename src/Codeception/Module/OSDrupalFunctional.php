@@ -100,7 +100,7 @@ class OSDrupalFunctional extends Module
     $this->watchdog = \Drupal::database()
       ->query('SELECT MAX(wid) FROM {watchdog}')
       ->fetchField();
-    \Drupal::getContainer()->get('path.alias_manager')->cacheClear();
+    \Drupal::getContainer()->get('path_alias.manager')->cacheClear();
     $this->startTransaction();
   }
 
