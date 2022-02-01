@@ -2,16 +2,7 @@
 Extension to the Codeception toolset for Drupal testing.
 
 ## Adding to your project
-To use, add the following repository definition to your composer.json:
-
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.office.oneshoe.nl/"
-        }
-    ]
-
-Then, require `oneshoe/drupal-codeception:dev-master`.
+Require `oneshoe/drupal-codeception:dev-master`.
 
 ## Configuring Codeception
 To add to Codeception, make the following changes to your test suite files. The
